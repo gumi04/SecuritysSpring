@@ -62,7 +62,7 @@ public class HttpSecurityConfig {
             .sessionManagement(sessionMagConfig -> sessionMagConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(HttpSecurityConfig::builtRequestMatchersV2)
+            .authorizeHttpRequests(HttpSecurityConfig::builtRequestMatchersSpringDoc)
             .build();
   }
 
@@ -119,12 +119,7 @@ public class HttpSecurityConfig {
     authReqConfig.anyRequest().authenticated();
   }
 
-  private static void builtRequestMatchersV2(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
-
-    //autorizacion de endpoint publicos
-    authReqConfig.requestMatchers(HttpMethod.POST, "/customers").permitAll();
-    authReqConfig.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
-    authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate").permitAll();
+  private static void builtRequestMatchersSpringDoc(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     authReqConfig.requestMatchers(
                     "/swagger-ui/**",
                     "/v3/api-docs/**",

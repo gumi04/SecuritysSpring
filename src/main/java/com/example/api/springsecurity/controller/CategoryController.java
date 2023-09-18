@@ -60,7 +60,7 @@ public class CategoryController {
   @Autowired
   private CategoryService categoryService;
 
-  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
+  @PreAuthorize("hasAuthority('READ_ALL_CATEGORIES')")
   @Operation(summary = "obtener categorias paginados", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Page<Category>> findAll(Pageable pageable) {
@@ -73,7 +73,7 @@ public class CategoryController {
     return ResponseEntity.notFound().build();
   }
 
-  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
+  @PreAuthorize("hasAuthority('READ_ONE_CATEGORY')")
   @Operation(summary = "obtener categoria por su id", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> findByid(@PathVariable Long id) {
@@ -84,21 +84,21 @@ public class CategoryController {
   }
 
 
-  @PreAuthorize("hasRole('ADMINISTRATOR')")
+  @PreAuthorize("hasAuthority('CREATE_ONE_CATEGORY')")
   @Operation(summary = "crear una categoria", security = {@SecurityRequirement(name = "bearer")})
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> create(@RequestBody @Valid CategoryDto categoryDto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(categoryDto));
   }
 
-  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
+  @PreAuthorize("hasAuthority('UPDATE_ONE_CATEGORY')")
   @Operation(summary = "actualizar categoria", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody @Valid CategoryDto categoryDto) {
     return ResponseEntity.ok(categoryService.update(id, categoryDto));
   }
 
-  @PreAuthorize("hasRole('ADMINISTRATOR')")
+  @PreAuthorize("hasAuthority('DISABLE_ONE_CATEGORY')")
   @Operation(summary = "desabilitar categoria", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> disableById(@PathVariable Long id) {

@@ -56,14 +56,14 @@ public class AuthenticationController {
   @Autowired
   private AuthenticationService authenticationService;
 
-
+  @PreAuthorize("permitAll")
   @Operation(summary = "autenticacion de usarios")
   @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<AuthenticationResponse> auntheticate(@RequestBody @Valid
                                                              AuthenticationRequest request) {
     return ResponseEntity.ok(authenticationService.login(request));
   }
-
+  @PreAuthorize("permitAll")
   @Operation(summary = "validacion de token")
   @GetMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Boolean> validate(@RequestParam String jwt) {
@@ -72,7 +72,7 @@ public class AuthenticationController {
 
   }
 
-  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR','CUSTOMER')")
+  @PreAuthorize("hasAuthority('READ_MY_PROFILE')")
   @Operation(summary = "autenticacion de usarios", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<User> findMyProfile() {
