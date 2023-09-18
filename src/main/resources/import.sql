@@ -1,6 +1,6 @@
-INSERT INTO "user" (username, name, password, roles) VALUES ('nami', 'luis márquez', '$2a$10$9TU/nhqwqqNDfRx8Eg2Wvu9i/yd7UimLaLYigHaad8R/qLj7j4H72', 'ROLE_CUSTOMER');
-INSERT INTO "user" (username, name, password, roles) VALUES ('robin', 'fulano pérez', '$2a$10$7Qsr4MRDTq4e.9ZjXgOvCu/0clEKlTGwtVlRMgi.wtB0AWiDISEx.', 'ROLE_ASSISTANT_ADMINISTRATOR');
-INSERT INTO "user" (username, name, password, roles) VALUES ('zoro', 'zoro', '$2a$10$Eb11qu4GEU3dVJmUtnfaVOuK7f8aaOYWNdNlxWGSC2VCR87ckD8nC', 'ROLE_ADMINISTRATOR');
+INSERT INTO "user" (username, name, password, roles) VALUES ('nami', 'luis márquez', '$2a$10$9TU/nhqwqqNDfRx8Eg2Wvu9i/yd7UimLaLYigHaad8R/qLj7j4H72', 'CUSTOMER');
+INSERT INTO "user" (username, name, password, roles) VALUES ('robin', 'fulano pérez', '$2a$10$7Qsr4MRDTq4e.9ZjXgOvCu/0clEKlTGwtVlRMgi.wtB0AWiDISEx.', 'ASSISTANT_ADMINISTRATOR');
+INSERT INTO "user" (username, name, password, roles) VALUES ('zoro', 'zoro', '$2a$10$Eb11qu4GEU3dVJmUtnfaVOuK7f8aaOYWNdNlxWGSC2VCR87ckD8nC', 'ADMINISTRATOR');
 
 insert into category (name, status) values ('Alcentra Capital Corp.','ENABLED');
 insert into category (name, status) values ('RiverNorth Opportunities Fund, Inc.','ENABLED');

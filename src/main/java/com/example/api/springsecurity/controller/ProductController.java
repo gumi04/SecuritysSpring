@@ -41,6 +41,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,8 @@ public class ProductController {
   @Autowired
   private ProductService productService;
 
+
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
   @Operation(summary = "obtener los productos paginados", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Page<Product>> findAll(Pageable pageable) {
@@ -71,6 +74,7 @@ public class ProductController {
     return ResponseEntity.notFound().build();
   }
 
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
   @Operation(summary = "obtener producto por el id", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Product> findByid(@PathVariable Long id) {
@@ -80,18 +84,21 @@ public class ProductController {
     return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  @PreAuthorize("hasRole('ADMINISTRATOR')")
   @Operation(summary = "crear producto", security = {@SecurityRequirement(name = "bearer")})
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Product> create(@RequestBody @Valid ProductDto productDto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(productDto));
   }
 
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
   @Operation(summary = "actualizar producto", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody @Valid ProductDto productDto) {
     return ResponseEntity.ok(productService.update(id, productDto));
   }
 
+  @PreAuthorize("hasRole('ADMINISTRATOR')")
   @Operation(summary = "desabilitar producto", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Product> disableById(@PathVariable Long id) {

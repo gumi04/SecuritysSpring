@@ -37,6 +37,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -72,14 +73,13 @@ public class User implements UserDetails {
 
     if (Objects.isNull(roles.getPermissions())) return null;
 
-    return roles.getPermissions().stream()
+    List<SimpleGrantedAuthority> authorities = roles.getPermissions().stream()
             .map(Enum::name)
             .map(SimpleGrantedAuthority::new)
-            /* .map(role -> {
-               String permission = role.name();
-               return new SimpleGrantedAuthority(permission);
-             })*/
             .collect(Collectors.toList());
+
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + this.roles.name()));
+    return authorities;
   }
 
   @Override
@@ -112,37 +112,4 @@ public class User implements UserDetails {
     return true;
   }
 
-
-/*  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Role getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Role roles) {
-    this.roles = roles;
-  }*/
 }

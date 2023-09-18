@@ -38,6 +38,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,6 +72,7 @@ public class AuthenticationController {
 
   }
 
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR','CUSTOMER')")
   @Operation(summary = "autenticacion de usarios", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<User> findMyProfile() {

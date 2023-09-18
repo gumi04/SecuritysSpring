@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
@@ -44,6 +45,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class HttpSecurityConfig {
 
   @Autowired
@@ -60,7 +62,7 @@ public class HttpSecurityConfig {
             .sessionManagement(sessionMagConfig -> sessionMagConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(HttpSecurityConfig::builtRequestMatchersRole)
+            .authorizeHttpRequests(HttpSecurityConfig::builtRequestMatchersV2)
             .build();
   }
 
@@ -117,19 +119,40 @@ public class HttpSecurityConfig {
     authReqConfig.anyRequest().authenticated();
   }
 
+  private static void builtRequestMatchersV2(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
+
+    //autorizacion de endpoint publicos
+    authReqConfig.requestMatchers(HttpMethod.POST, "/customers").permitAll();
+    authReqConfig.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
+    authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate").permitAll();
+    authReqConfig.requestMatchers(
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html")
+            .permitAll();
+
+    authReqConfig.anyRequest().authenticated();
+  }
+
   private static void builtRequestMatchersRole(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     //autorizacion para productos
     authReqConfig.requestMatchers(HttpMethod.GET, "/products")
-                    .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/products/{id}")
-            .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name());
+
+    //validar con un regex
+    //authReqConfig.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.GET, "/products/[0-9]*"))
+    //      .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+
 
     authReqConfig.requestMatchers(HttpMethod.POST, "/products")
             .hasAnyRole(Role.ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{id}")
-            .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{id}/disabled")
             .hasAnyRole(Role.ADMINISTRATOR.name());
@@ -138,23 +161,23 @@ public class HttpSecurityConfig {
     //autorizacion para categorias
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/categories")
-            .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/categories/{id}")
-            .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.POST, "/categories")
             .hasAnyRole(Role.ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/categories/{id}")
-            .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/categories/{id}/disabled")
             .hasAnyRole(Role.ADMINISTRATOR.name());
 
     //autorizacion para profile
     authReqConfig.requestMatchers(HttpMethod.GET, "/auth/profile")
-            .hasAnyRole(Role.ADMINISTRATOR.name(),Role.ASSISTANT_ADMINISTRATOR.name(), Role.CUSTOMER.name());
+            .hasAnyRole(Role.ADMINISTRATOR.name(), Role.ASSISTANT_ADMINISTRATOR.name(), Role.CUSTOMER.name());
 
     //autorizacion de endpoint publicos
     authReqConfig.requestMatchers(HttpMethod.POST, "/customers").permitAll();

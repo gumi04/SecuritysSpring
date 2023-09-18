@@ -41,6 +41,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +60,7 @@ public class CategoryController {
   @Autowired
   private CategoryService categoryService;
 
-
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
   @Operation(summary = "obtener categorias paginados", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Page<Category>> findAll(Pageable pageable) {
@@ -72,6 +73,7 @@ public class CategoryController {
     return ResponseEntity.notFound().build();
   }
 
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
   @Operation(summary = "obtener categoria por su id", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> findByid(@PathVariable Long id) {
@@ -81,18 +83,22 @@ public class CategoryController {
     return category.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+
+  @PreAuthorize("hasRole('ADMINISTRATOR')")
   @Operation(summary = "crear una categoria", security = {@SecurityRequirement(name = "bearer")})
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> create(@RequestBody @Valid CategoryDto categoryDto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(categoryDto));
   }
 
+  @PreAuthorize("hasAnyRole('ADMINISTRATOR','ASSISTANT_ADMINISTRATOR')")
   @Operation(summary = "actualizar categoria", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody @Valid CategoryDto categoryDto) {
     return ResponseEntity.ok(categoryService.update(id, categoryDto));
   }
 
+  @PreAuthorize("hasRole('ADMINISTRATOR')")
   @Operation(summary = "desabilitar categoria", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Category> disableById(@PathVariable Long id) {
