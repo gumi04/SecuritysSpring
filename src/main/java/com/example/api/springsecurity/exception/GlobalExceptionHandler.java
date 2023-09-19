@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,6 +55,19 @@ public class GlobalExceptionHandler {
     error.setMethod(request.getMethod());
     error.setTimeStamp(LocalDateTime.now());
     error.setMessage("Error interno en el servidor");
+    return error;
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ResponseBody
+  public ApiError handlerAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+    ApiError error = new ApiError();
+    error.setBackMessage(ex.getMessage());
+    error.setUrl(request.getRequestURL().toString());
+    error.setMethod(request.getMethod());
+    error.setTimeStamp(LocalDateTime.now());
+    error.setMessage("Acceso denegado. No tienes los permisos necesraios para acceder a esta funcion. Por favor, contacta al adminisstrador si crees que es un error");
     return error;
   }
 

@@ -28,6 +28,7 @@
 package com.example.api.springsecurity.config.security;
 
 import com.example.api.springsecurity.config.security.filter.JwtAuthenticationFilter;
+import com.example.api.springsecurity.config.security.handler.CustomAuthenticationEntryPoint;
 import com.example.api.springsecurity.constants.Role;
 import com.example.api.springsecurity.constants.RolePermission;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity(prePostEnabled = true)
 public class HttpSecurityConfig {
 
   @Autowired
@@ -55,6 +58,11 @@ public class HttpSecurityConfig {
   @Autowired
   private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+  @Autowired
+  private AuthenticationEntryPoint authenticationEntryPoint;
+  @Autowired
+  private AccessDeniedHandler accessDeniedHandler;
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
@@ -62,7 +70,11 @@ public class HttpSecurityConfig {
             .sessionManagement(sessionMagConfig -> sessionMagConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(HttpSecurityConfig::builtRequestMatchersSpringDoc)
+            .authorizeHttpRequests(HttpSecurityConfig::builtRequestMatchers)
+            .exceptionHandling(exceptionHandling -> {
+              exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
+              exceptionHandling.accessDeniedHandler(accessDeniedHandler);
+            })
             .build();
   }
 

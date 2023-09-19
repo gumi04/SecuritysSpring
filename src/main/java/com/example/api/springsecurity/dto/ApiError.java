@@ -27,6 +27,7 @@
 
 package com.example.api.springsecurity.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class ApiError implements Serializable {
 
   private String backMessage;
   private String message;
+  @JsonFormat(pattern = "yyy/MM/dd HH:mm:ss")
   private LocalDateTime timeStamp;
   private String url;
   private String method;
