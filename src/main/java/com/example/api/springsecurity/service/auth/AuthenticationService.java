@@ -31,7 +31,7 @@ import com.example.api.springsecurity.dto.RegistredUser;
 import com.example.api.springsecurity.dto.SaveUser;
 import com.example.api.springsecurity.dto.auth.AuthenticationRequest;
 import com.example.api.springsecurity.dto.auth.AuthenticationResponse;
-import com.example.api.springsecurity.persistence.entity.User;
+import com.example.api.springsecurity.persistence.entity.security.User;
 
 public interface AuthenticationService {
   RegistredUser registerCustomer(SaveUser newUser);

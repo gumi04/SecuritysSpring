@@ -20,19 +20,19 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: UserService
+ * Nombre de archivo: RoleRepository
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 19, 2023
  */
 
-package com.example.api.springsecurity.service;
+package com.example.api.springsecurity.persistence.repository.security;
 
-import com.example.api.springsecurity.dto.SaveUser;
-import com.example.api.springsecurity.persistence.entity.security.User;
+import com.example.api.springsecurity.persistence.entity.security.Role;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserService {
-  User saveCustomer(SaveUser newUser);
-
-  Optional<User> findOneByUsername(String username);
+@Repository
+public interface RoleRepository extends JpaRepository<Role, Long> {
+  Optional<Role> findByName(String defaultRole);
 }

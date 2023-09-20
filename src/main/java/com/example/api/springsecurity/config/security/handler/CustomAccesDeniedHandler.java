@@ -42,7 +42,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomAccesDeniedHandler  implements AccessDeniedHandler {
+public class CustomAccesDeniedHandler implements AccessDeniedHandler {
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
     ApiError error = new ApiError();

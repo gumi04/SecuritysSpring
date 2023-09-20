@@ -20,20 +20,24 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: UserRepository
+ * Nombre de archivo: OperationRepository
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 19, 2023
  */
 
-package com.example.api.springsecurity.persistence.repository;
+package com.example.api.springsecurity.persistence.repository.security;
 
-import com.example.api.springsecurity.persistence.entity.User;
+import com.example.api.springsecurity.persistence.entity.security.Operation;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface OperationRepository extends JpaRepository<Operation, Long> {
+  @Query("SELECT o FROM Operation o WHERE o.permitAll = true")
+  List<Operation> findByPublicAccess();
 
-  Optional<User> findByUsername(String username);
+  Optional<Operation> findByName(String defaultRole);
 }

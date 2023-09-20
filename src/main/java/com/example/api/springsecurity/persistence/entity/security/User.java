@@ -25,16 +25,15 @@
  * Fecha de creación: septiembre 15, 2023
  */
 
-package com.example.api.springsecurity.persistence.entity;
+package com.example.api.springsecurity.persistence.entity.security;
 
-import com.example.api.springsecurity.constants.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.List;
@@ -64,21 +63,22 @@ public class User implements UserDetails {
   @Getter(AccessLevel.NONE)
   private String password;
 
-  @Enumerated(EnumType.STRING)
-  private Role roles;
+  @ManyToOne
+  @JoinColumn(name = "role_id")
+  private Role role;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if (Objects.isNull(roles)) return null;
+    if (Objects.isNull(role)) return null;
 
-    if (Objects.isNull(roles.getPermissions())) return null;
+    if (Objects.isNull(role.getPermissions())) return null;
 
-    List<SimpleGrantedAuthority> authorities = roles.getPermissions().stream()
-            .map(Enum::name)
+    List<SimpleGrantedAuthority> authorities = role.getPermissions().stream()
+            .map(item -> item.getOperation().getName())
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
 
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + this.roles.name()));
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.getName()));
     return authorities;
   }
 

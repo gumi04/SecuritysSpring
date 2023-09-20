@@ -32,7 +32,7 @@ import com.example.api.springsecurity.dto.SaveUser;
 import com.example.api.springsecurity.dto.auth.AuthenticationRequest;
 import com.example.api.springsecurity.dto.auth.AuthenticationResponse;
 import com.example.api.springsecurity.exception.ObjectNotFoundException;
-import com.example.api.springsecurity.persistence.entity.User;
+import com.example.api.springsecurity.persistence.entity.security.User;
 import com.example.api.springsecurity.service.UserService;
 import com.example.api.springsecurity.service.auth.AuthenticationService;
 import com.example.api.springsecurity.service.auth.JwtService;
@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     userDto.setId(user.getId());
     userDto.setName(user.getName());
     userDto.setUserName(user.getName());
-    userDto.setRole(user.getRoles().name());
+    userDto.setRole(user.getRole().getName());
 
     userDto.setJwt(jwtService.generateToken(user, generateExtraClaims(user)));
     return userDto;
@@ -120,7 +120,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private Map<String, Object> generateExtraClaims(User user) {
     Map<String, Object> extraClaims = new HashMap<>();
     extraClaims.put("name", user.getName());
-    extraClaims.put("role", user.getRoles().name());
+    extraClaims.put("role", user.getRole().getName());
     extraClaims.put("authorities", user.getAuthorities());
     return extraClaims;
   }

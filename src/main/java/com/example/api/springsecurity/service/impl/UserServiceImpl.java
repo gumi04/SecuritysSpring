@@ -27,11 +27,12 @@
 
 package com.example.api.springsecurity.service.impl;
 
-import com.example.api.springsecurity.constants.Role;
 import com.example.api.springsecurity.dto.SaveUser;
 import com.example.api.springsecurity.exception.InvalidPasswordException;
-import com.example.api.springsecurity.persistence.entity.User;
-import com.example.api.springsecurity.persistence.repository.UserRepository;
+import com.example.api.springsecurity.persistence.entity.security.Role;
+import com.example.api.springsecurity.persistence.entity.security.User;
+import com.example.api.springsecurity.persistence.repository.security.UserRepository;
+import com.example.api.springsecurity.service.RoleService;
 import com.example.api.springsecurity.service.UserService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class UserServiceImpl implements UserService {
   private PasswordEncoder passwordEncoder;
   @Autowired
   private UserRepository userRepository;
+  @Autowired
+  private RoleService roleService;
 
   @Override
   public User saveCustomer(SaveUser newUser) {
@@ -55,7 +58,8 @@ public class UserServiceImpl implements UserService {
     User user = new User();
     user.setName(newUser.getName());
     user.setUsername(newUser.getUsername());
-    user.setRoles(Role.CUSTOMER);
+    Role defaultRole = roleService.findDefaultRole();
+    user.setRole(defaultRole);
     user.setPassword(passwordEncoder.encode(newUser.getPassword()));
     return userRepository.save(user);
   }

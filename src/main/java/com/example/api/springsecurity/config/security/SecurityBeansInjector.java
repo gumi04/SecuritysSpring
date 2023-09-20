@@ -28,7 +28,7 @@
 package com.example.api.springsecurity.config.security;
 
 import com.example.api.springsecurity.exception.ObjectNotFoundException;
-import com.example.api.springsecurity.persistence.repository.UserRepository;
+import com.example.api.springsecurity.persistence.repository.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

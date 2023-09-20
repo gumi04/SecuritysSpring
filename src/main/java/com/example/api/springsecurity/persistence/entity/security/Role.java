@@ -20,27 +20,35 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: RolePermission
+ * Nombre de archivo: Role
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 19, 2023
  */
 
-package com.example.api.springsecurity.constants;
+package com.example.api.springsecurity.persistence.entity.security;
 
-public enum RolePermission {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-  READ_ALL_PRODUCTS,
-  READ_ONE_PRODUCT,
-  CREATE_ONE_PRODUCT,
-  UPDATE_ONE_PRODUCT,
-  DISABLE_ONE_PRODUCT,
+@Entity
+@Getter
+@Setter
+public class Role {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-  READ_ALL_CATEGORIES,
-  READ_ONE_CATEGORY,
-  CREATE_ONE_CATEGORY,
-  UPDATE_ONE_CATEGORY,
-  DISABLE_ONE_CATEGORY,
+  private String name;
 
-  READ_MY_PROFILE;
-
+  @JsonIgnore
+  @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
+  private List<GrantedPermission> permissions;
 }

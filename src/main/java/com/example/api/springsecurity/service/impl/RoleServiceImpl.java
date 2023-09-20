@@ -20,19 +20,33 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: UserService
+ * Nombre de archivo: RoleServieImpl
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 19, 2023
  */
 
-package com.example.api.springsecurity.service;
+package com.example.api.springsecurity.service.impl;
 
-import com.example.api.springsecurity.dto.SaveUser;
-import com.example.api.springsecurity.persistence.entity.security.User;
-import java.util.Optional;
+import com.example.api.springsecurity.exception.ObjectNotFoundException;
+import com.example.api.springsecurity.persistence.entity.security.Role;
+import com.example.api.springsecurity.persistence.repository.security.RoleRepository;
+import com.example.api.springsecurity.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
-  User saveCustomer(SaveUser newUser);
+@Service
+public class RoleServiceImpl implements RoleService {
 
-  Optional<User> findOneByUsername(String username);
+  @Value("${security.default.role}")
+  private String defaultRole;
+
+  @Autowired
+  private RoleRepository roleRepository;
+
+  @Override
+  public Role findDefaultRole() {
+    return roleRepository.findByName(defaultRole)
+            .orElseThrow(() -> new ObjectNotFoundException("Role not found. Default role"));
+  }
 }

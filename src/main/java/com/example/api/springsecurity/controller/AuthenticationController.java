@@ -29,7 +29,7 @@ package com.example.api.springsecurity.controller;
 
 import com.example.api.springsecurity.dto.auth.AuthenticationRequest;
 import com.example.api.springsecurity.dto.auth.AuthenticationResponse;
-import com.example.api.springsecurity.persistence.entity.User;
+import com.example.api.springsecurity.persistence.entity.security.User;
 import com.example.api.springsecurity.service.auth.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -63,6 +63,7 @@ public class AuthenticationController {
                                                              AuthenticationRequest request) {
     return ResponseEntity.ok(authenticationService.login(request));
   }
+
   @PreAuthorize("permitAll")
   @Operation(summary = "validacion de token")
   @GetMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)

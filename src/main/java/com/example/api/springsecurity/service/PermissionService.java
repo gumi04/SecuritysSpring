@@ -20,19 +20,26 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: UserService
+ * Nombre de archivo: PermissionService
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 19, 2023
  */
 
 package com.example.api.springsecurity.service;
 
-import com.example.api.springsecurity.dto.SaveUser;
-import com.example.api.springsecurity.persistence.entity.security.User;
+import com.example.api.springsecurity.dto.SavePermission;
+import com.example.api.springsecurity.dto.ShowPermission;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface UserService {
-  User saveCustomer(SaveUser newUser);
+public interface PermissionService {
 
-  Optional<User> findOneByUsername(String username);
+  Page<ShowPermission> findAll(Pageable pageable);
+
+  Optional<ShowPermission> findOneById(Long permissionId);
+
+  ShowPermission createOne(SavePermission savePermission);
+
+  ShowPermission deleteOneById(Long permissionId);
 }

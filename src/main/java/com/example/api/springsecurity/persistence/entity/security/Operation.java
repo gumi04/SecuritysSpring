@@ -20,19 +20,34 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: UserService
+ * Nombre de archivo: Operation
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 19, 2023
  */
 
-package com.example.api.springsecurity.service;
+package com.example.api.springsecurity.persistence.entity.security;
 
-import com.example.api.springsecurity.dto.SaveUser;
-import com.example.api.springsecurity.persistence.entity.security.User;
-import java.util.Optional;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
-public interface UserService {
-  User saveCustomer(SaveUser newUser);
-
-  Optional<User> findOneByUsername(String username);
+@Entity
+@Getter
+@Setter
+public class Operation {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String name;
+  private String path;
+  private String httpMethod;
+  private boolean permitAll;
+  @ManyToOne
+  @JoinColumn(name = "module_id")
+  private Module module;
 }

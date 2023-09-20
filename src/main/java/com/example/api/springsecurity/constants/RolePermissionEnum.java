@@ -20,19 +20,27 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: UserService
+ * Nombre de archivo: RolePermission
  * Autor: 319207
  * Fecha de creación: septiembre 15, 2023
  */
 
-package com.example.api.springsecurity.service;
+package com.example.api.springsecurity.constants;
 
-import com.example.api.springsecurity.dto.SaveUser;
-import com.example.api.springsecurity.persistence.entity.security.User;
-import java.util.Optional;
+public enum RolePermissionEnum {
 
-public interface UserService {
-  User saveCustomer(SaveUser newUser);
+  READ_ALL_PRODUCTS,
+  READ_ONE_PRODUCT,
+  CREATE_ONE_PRODUCT,
+  UPDATE_ONE_PRODUCT,
+  DISABLE_ONE_PRODUCT,
 
-  Optional<User> findOneByUsername(String username);
+  READ_ALL_CATEGORIES,
+  READ_ONE_CATEGORY,
+  CREATE_ONE_CATEGORY,
+  UPDATE_ONE_CATEGORY,
+  DISABLE_ONE_CATEGORY,
+
+  READ_MY_PROFILE;
+
 }

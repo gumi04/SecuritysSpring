@@ -107,6 +107,14 @@ public class SpringDocConfig {
             .build();
   }
 
+  @Bean
+  public GroupedOpenApi permisisonsGrup() {
+    return GroupedOpenApi.builder()
+            .group("permisisons")
+            .pathsToMatch("/permissions/**")
+            .build();
+  }
+
   private SecurityScheme createAPIKeyScheme() {
     return new SecurityScheme().type(SecurityScheme.Type.HTTP)
             .bearerFormat("JWT")
