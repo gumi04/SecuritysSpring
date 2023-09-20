@@ -20,30 +20,28 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: AuthenticationRequest
+ * Nombre de archivo: JwtTokenRepository
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 20, 2023
  */
 
-package com.example.api.springsecurity.dto.auth;
+package com.example.api.springsecurity.persistence.repository.security;
 
-import java.io.Serializable;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.api.springsecurity.persistence.entity.security.JwtToken;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
- * The type Authentication request.
+ * The interface Jwt token repository.
  */
-@Getter
-@Setter
-public class AuthenticationRequest implements Serializable {
-
+@Repository
+public interface JwtTokenRepository extends JpaRepository<JwtToken, Long> {
   /**
-   * The Username.
+   * Find by token optional.
+   *
+   * @param jwt the jwt
+   * @return the optional
    */
-  private String username;
-  /**
-   * The Password.
-   */
-  private String password;
+  Optional<JwtToken> findByToken(String jwt);
 }

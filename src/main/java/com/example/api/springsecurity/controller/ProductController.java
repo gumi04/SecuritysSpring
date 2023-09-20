@@ -50,6 +50,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type Product controller.
+ */
 @RestController
 @RequestMapping("/products")
 @Tag(
@@ -57,10 +60,19 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Operaciones relacionadas con los productos")
 public class ProductController {
 
+  /**
+   * The Product service.
+   */
   @Autowired
   private ProductService productService;
 
 
+  /**
+   * Find all response entity.
+   *
+   * @param pageable the pageable
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('READ_ALL_PRODUCTS')")
   @Operation(summary = "obtener los productos paginados", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,6 +86,12 @@ public class ProductController {
     return ResponseEntity.notFound().build();
   }
 
+  /**
+   * Find byid response entity.
+   *
+   * @param id the id
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('READ_ONE_PRODUCT')")
   @Operation(summary = "obtener producto por el id", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,6 +102,12 @@ public class ProductController {
     return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Create response entity.
+   *
+   * @param productDto the product dto
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('CREATE_ONE_PRODUCT')")
   @Operation(summary = "crear producto", security = {@SecurityRequirement(name = "bearer")})
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,6 +115,13 @@ public class ProductController {
     return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(productDto));
   }
 
+  /**
+   * Update response entity.
+   *
+   * @param id         the id
+   * @param productDto the product dto
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('UPDATE_ONE_PRODUCT')")
   @Operation(summary = "actualizar producto", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,6 +129,12 @@ public class ProductController {
     return ResponseEntity.ok(productService.update(id, productDto));
   }
 
+  /**
+   * Disable by id response entity.
+   *
+   * @param id the id
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('DISABLE_ONE_PRODUCT')")
   @Operation(summary = "desabilitar producto", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)

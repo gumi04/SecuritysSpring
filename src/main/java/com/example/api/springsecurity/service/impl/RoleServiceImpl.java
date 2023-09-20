@@ -35,15 +35,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Role service.
+ */
 @Service
 public class RoleServiceImpl implements RoleService {
 
+  /**
+   * The Default role.
+   */
   @Value("${security.default.role}")
   private String defaultRole;
 
+  /**
+   * The Role repository.
+   */
   @Autowired
   private RoleRepository roleRepository;
 
+  /**
+   * Find default role role.
+   *
+   * @return the role
+   */
   @Override
   public Role findDefaultRole() {
     return roleRepository.findByName(defaultRole)

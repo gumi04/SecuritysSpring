@@ -27,6 +27,9 @@
 
 package com.example.api.springsecurity.exception;
 
+/**
+ * The type Object not found exception.
+ */
 public class ObjectNotFoundException extends RuntimeException {
   /**
    * Constructs a new runtime exception with {@code null} as its
@@ -42,8 +45,7 @@ public class ObjectNotFoundException extends RuntimeException {
    * The cause is not initialized, and may subsequently be initialized by a
    * call to {@link #initCause}.
    *
-   * @param message the detail message. The detail message is saved for
-   *                later retrieval by the {@link #getMessage()} method.
+   * @param message the detail message. The detail message is saved for                later retrieval by the {@link #getMessage()} method.
    */
   public ObjectNotFoundException(String message) {
     super(message);
@@ -55,12 +57,8 @@ public class ObjectNotFoundException extends RuntimeException {
    * {@code cause} is <i>not</i> automatically incorporated in
    * this runtime exception's detail message.
    *
-   * @param message the detail message (which is saved for later retrieval
-   *                by the {@link #getMessage()} method).
-   * @param cause   the cause (which is saved for later retrieval by the
-   *                {@link #getCause()} method).  (A {@code null} value is
-   *                permitted, and indicates that the cause is nonexistent or
-   *                unknown.)
+   * @param message the detail message (which is saved for later retrieval                by the {@link #getMessage()} method).
+   * @param cause   the cause (which is saved for later retrieval by the                {@link #getCause()} method).  (A {@code null} value is                permitted, and indicates that the cause is nonexistent or                unknown.)
    * @since 1.4
    */
   public ObjectNotFoundException(String message, Throwable cause) {

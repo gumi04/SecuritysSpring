@@ -41,8 +41,20 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
+/**
+ * The type Custom acces denied handler.
+ */
 @Component
 public class CustomAccesDeniedHandler implements AccessDeniedHandler {
+  /**
+   * Handle.
+   *
+   * @param request               the request
+   * @param response              the response
+   * @param accessDeniedException the access denied exception
+   * @throws IOException      the io exception
+   * @throws ServletException the servlet exception
+   */
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
     ApiError error = new ApiError();

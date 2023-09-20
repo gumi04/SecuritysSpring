@@ -20,30 +20,60 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: AuthenticationRequest
+ * Nombre de archivo: JwtToken
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 20, 2023
  */
 
-package com.example.api.springsecurity.dto.auth;
+package com.example.api.springsecurity.persistence.entity.security;
 
-import java.io.Serializable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * The type Authentication request.
+ * The type Jwt token.
  */
+@Entity
 @Getter
 @Setter
-public class AuthenticationRequest implements Serializable {
+public class JwtToken {
 
   /**
-   * The Username.
+   * The Id.
    */
-  private String username;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   /**
-   * The Password.
+   * The Token.
    */
-  private String password;
+  @Column(length = 2040)
+  private String token;
+
+  /**
+   * The Expiration.
+   */
+  private Date expiration;
+
+  /**
+   * The Is valid.
+   */
+  private boolean isValid;
+
+  /**
+   * The User.
+   */
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
+
 }

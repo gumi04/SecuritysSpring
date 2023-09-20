@@ -31,10 +31,16 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Authentication response.
+ */
 @Getter
 @Setter
 public class AuthenticationResponse implements Serializable {
 
+  /**
+   * The Jwt.
+   */
   private String jwt;
 
 }

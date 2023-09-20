@@ -41,10 +41,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * The type Global exception handler.
+ */
 @RestControllerAdvice
 @Log4j2
 public class GlobalExceptionHandler {
 
+  /**
+   * Global error handler api error.
+   *
+   * @param ex      the ex
+   * @param request the request
+   * @return the api error
+   */
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ResponseBody
@@ -58,6 +68,13 @@ public class GlobalExceptionHandler {
     return error;
   }
 
+  /**
+   * Handler access denied exception api error.
+   *
+   * @param ex      the ex
+   * @param request the request
+   * @return the api error
+   */
   @ExceptionHandler(AccessDeniedException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ResponseBody
@@ -71,6 +88,13 @@ public class GlobalExceptionHandler {
     return error;
   }
 
+  /**
+   * Global error handler api error.
+   *
+   * @param ex      the ex
+   * @param request the request
+   * @return the api error
+   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ResponseBody

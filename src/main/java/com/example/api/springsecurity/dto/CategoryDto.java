@@ -32,9 +32,15 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Category dto.
+ */
 @Getter
 @Setter
 public class CategoryDto implements Serializable {
+  /**
+   * The Name.
+   */
   @NotNull
   private String name;
 }

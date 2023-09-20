@@ -43,31 +43,61 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Permission service.
+ */
 @Service
 public class PermissionServiceImpl implements PermissionService {
 
+  /**
+   * The Permission repository.
+   */
   @Autowired
   private PermissionRepository permissionRepository;
 
+  /**
+   * The Role repository.
+   */
   @Autowired
   private RoleRepository roleRepository;
 
+  /**
+   * The Operation repository.
+   */
   @Autowired
   private OperationRepository operationRepository;
 
 
+  /**
+   * Find all page.
+   *
+   * @param pageable the pageable
+   * @return the page
+   */
   @Override
   public Page<ShowPermission> findAll(Pageable pageable) {
     return permissionRepository.findAll(pageable)
             .map(this::mapEntityToShowDto);
   }
 
+  /**
+   * Find one by id optional.
+   *
+   * @param permissionId the permission id
+   * @return the optional
+   */
   @Override
   public Optional<ShowPermission> findOneById(Long permissionId) {
     return permissionRepository.findById(permissionId)
             .map(this::mapEntityToShowDto);
   }
 
+  /**
+   * Create one show permission.
+   *
+   * @param savePermission the save permission
+   * @return the show permission
+   */
   @Override
   public ShowPermission createOne(SavePermission savePermission) {
     GrantedPermission newPermission = new GrantedPermission();
@@ -84,6 +114,12 @@ public class PermissionServiceImpl implements PermissionService {
     return this.mapEntityToShowDto(newPermission);
   }
 
+  /**
+   * Delete one by id show permission.
+   *
+   * @param permissionId the permission id
+   * @return the show permission
+   */
   @Override
   public ShowPermission deleteOneById(Long permissionId) {
     GrantedPermission permission = permissionRepository.findById(permissionId)
@@ -94,8 +130,14 @@ public class PermissionServiceImpl implements PermissionService {
     return this.mapEntityToShowDto(permission);
   }
 
+  /**
+   * Map entity to show dto show permission.
+   *
+   * @param grantedPermission the granted permission
+   * @return the show permission
+   */
   private ShowPermission mapEntityToShowDto(GrantedPermission grantedPermission) {
-    if(grantedPermission == null) return null;
+    if (grantedPermission == null) return null;
 
     ShowPermission showDto = new ShowPermission();
     showDto.setId(grantedPermission.getId());

@@ -40,16 +40,34 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+/**
+ * The type User service.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
+  /**
+   * The Password encoder.
+   */
   @Autowired
   private PasswordEncoder passwordEncoder;
+  /**
+   * The User repository.
+   */
   @Autowired
   private UserRepository userRepository;
+  /**
+   * The Role service.
+   */
   @Autowired
   private RoleService roleService;
 
+  /**
+   * Save customer user.
+   *
+   * @param newUser the new user
+   * @return the user
+   */
   @Override
   public User saveCustomer(SaveUser newUser) {
 
@@ -64,11 +82,22 @@ public class UserServiceImpl implements UserService {
     return userRepository.save(user);
   }
 
+  /**
+   * Find one by username optional.
+   *
+   * @param username the username
+   * @return the optional
+   */
   @Override
   public Optional<User> findOneByUsername(String username) {
     return userRepository.findByUsername(username);
   }
 
+  /**
+   * Validate password.
+   *
+   * @param newUser the new user
+   */
   private void validatePassword(SaveUser newUser) {
 
     if (!StringUtils.hasText(newUser.getPassword()) || !StringUtils.hasText(newUser.getRepeatedPassword())) {

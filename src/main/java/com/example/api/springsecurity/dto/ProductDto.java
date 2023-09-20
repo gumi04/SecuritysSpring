@@ -34,13 +34,25 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Product dto.
+ */
 @Getter
 @Setter
 public class ProductDto {
+  /**
+   * The Name.
+   */
   @NotBlank
   private String name;
+  /**
+   * The Price.
+   */
   @DecimalMin(value = "0.01")
   private BigDecimal price;
+  /**
+   * The Category id.
+   */
   @Min(value = 1)
   private Long categoryId;
 }

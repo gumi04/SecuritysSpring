@@ -36,18 +36,30 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Granted permission.
+ */
 @Entity
 @Getter
 @Setter
 public class GrantedPermission {
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
 
+  /**
+   * The Role.
+   */
   @ManyToOne
   @JoinColumn(name = "role_id")
   private Role role;
+  /**
+   * The Operation.
+   */
   @ManyToOne
   @JoinColumn(name = "operation_id")
   private Operation operation;

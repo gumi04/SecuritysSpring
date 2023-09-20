@@ -36,15 +36,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+/**
+ * The type Category.
+ */
 @Entity
 @Data
 public class Category {
 
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long Id;
 
+  /**
+   * The Name.
+   */
   private String name;
+  /**
+   * The Status.
+   */
   @Enumerated(EnumType.STRING)
   private CategoryStatus status;
 

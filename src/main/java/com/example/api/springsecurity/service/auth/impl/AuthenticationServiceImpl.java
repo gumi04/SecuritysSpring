@@ -32,12 +32,16 @@ import com.example.api.springsecurity.dto.SaveUser;
 import com.example.api.springsecurity.dto.auth.AuthenticationRequest;
 import com.example.api.springsecurity.dto.auth.AuthenticationResponse;
 import com.example.api.springsecurity.exception.ObjectNotFoundException;
+import com.example.api.springsecurity.persistence.entity.security.JwtToken;
 import com.example.api.springsecurity.persistence.entity.security.User;
+import com.example.api.springsecurity.persistence.repository.security.JwtTokenRepository;
 import com.example.api.springsecurity.service.UserService;
 import com.example.api.springsecurity.service.auth.AuthenticationService;
 import com.example.api.springsecurity.service.auth.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,32 +49,66 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+/**
+ * The type Authentication service.
+ */
 @Service
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+  /**
+   * The User service.
+   */
   @Autowired
   private UserService userService;
+  /**
+   * The Jwt service.
+   */
   @Autowired
   private JwtService jwtService;
+  /**
+   * The Authentication manager.
+   */
   @Autowired
   private AuthenticationManager authenticationManager;
+  /**
+   * The Jwt token repository.
+   */
+  @Autowired
+  private JwtTokenRepository jwtTokenRepository;
 
+  /**
+   * Register customer registred user.
+   *
+   * @param newUser the new user
+   * @return the registred user
+   */
   @Override
   public RegistredUser registerCustomer(SaveUser newUser) {
     User user = userService.saveCustomer(newUser);
-
+    String jwt = jwtService.generateToken(user, generateExtraClaims(user));
+    saveUserToken(user, jwt);
     RegistredUser userDto = new RegistredUser();
     userDto.setId(user.getId());
     userDto.setName(user.getName());
     userDto.setUserName(user.getName());
     userDto.setRole(user.getRole().getName());
 
-    userDto.setJwt(jwtService.generateToken(user, generateExtraClaims(user)));
+    userDto.setJwt(jwt);
+
+
     return userDto;
   }
 
+
+  /**
+   * Login authentication response.
+   *
+   * @param request the request
+   * @return the authentication response
+   */
   @Override
   public AuthenticationResponse login(AuthenticationRequest request) {
     Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -79,13 +117,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     User user = userService.findOneByUsername(request.getUsername())
             .orElseThrow(() -> new ObjectNotFoundException("User not found"));
-
+    String jwt = jwtService.generateToken(user, generateExtraClaims(user));
+    saveUserToken(user, jwt);
 
     AuthenticationResponse authResp = new AuthenticationResponse();
-    authResp.setJwt(jwtService.generateToken(user, generateExtraClaims(user)));
+
+    authResp.setJwt(jwt);
     return authResp;
   }
 
+  /**
+   * Validate token boolean.
+   *
+   * @param jwt the jwt
+   * @return the boolean
+   */
   @Override
   public Boolean validateToken(String jwt) {
     try {
@@ -99,6 +145,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   }
 
+  /**
+   * Find loggged in user user.
+   *
+   * @return the user
+   */
   @Override
   public User findLogggedInUser() {
     /*
@@ -117,6 +168,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   }
 
+  /**
+   * Logout.
+   *
+   * @param request the request
+   */
+  @Override
+  public void logout(HttpServletRequest request) {
+
+    String jwt = jwtService.extractJwtFromRequest(request);
+    if (jwt == null || !StringUtils.hasText(jwt)) {
+      return;
+    }
+
+    Optional<JwtToken> token = jwtTokenRepository.findByToken(jwt);
+
+    if (token.isPresent() && token.get().isValid()) {
+      token.get().setValid(false);
+      jwtTokenRepository.save(token.get());
+    }
+
+  }
+
+  /**
+   * Generate extra claims map.
+   *
+   * @param user the user
+   * @return the map
+   */
   private Map<String, Object> generateExtraClaims(User user) {
     Map<String, Object> extraClaims = new HashMap<>();
     extraClaims.put("name", user.getName());
@@ -124,4 +203,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     extraClaims.put("authorities", user.getAuthorities());
     return extraClaims;
   }
+
+  /**
+   * Save user token.
+   *
+   * @param user the user
+   * @param jwt  the jwt
+   */
+  private void saveUserToken(User user, String jwt) {
+    JwtToken token = new JwtToken();
+    token.setToken(jwt);
+    token.setUser(user);
+    token.setExpiration(jwtService.extractExpiration(jwt));
+    token.setValid(true);
+    jwtTokenRepository.save(token);
+
+  }
+
 }

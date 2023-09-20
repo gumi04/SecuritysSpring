@@ -41,8 +41,20 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+/**
+ * The type Custom authentication entry point.
+ */
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+  /**
+   * Commence.
+   *
+   * @param request       the request
+   * @param response      the response
+   * @param authException the auth exception
+   * @throws IOException      the io exception
+   * @throws ServletException the servlet exception
+   */
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
     ApiError error = new ApiError();

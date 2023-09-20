@@ -32,11 +32,20 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Save permission.
+ */
 @Getter
 @Setter
 public class SavePermission implements Serializable {
+  /**
+   * The Role.
+   */
   @NotBlank
   private String role;
+  /**
+   * The Operation.
+   */
   @NotBlank
   private String operation;
 

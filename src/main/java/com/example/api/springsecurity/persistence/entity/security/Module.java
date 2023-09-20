@@ -34,14 +34,26 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Module.
+ */
 @Entity
 @Getter
 @Setter
 public class Module {
 
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  /**
+   * The Name.
+   */
   private String name;
+  /**
+   * The Base path.
+   */
   private String basePath;
 }

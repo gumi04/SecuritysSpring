@@ -32,15 +32,30 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Save user.
+ */
 @Getter
 @Setter
 public class SaveUser implements Serializable {
+  /**
+   * The Name.
+   */
   @Size(min = 4)
   private String name;
+  /**
+   * The Username.
+   */
   @Size(min = 4)
   private String username;
+  /**
+   * The Password.
+   */
   @Size(min = 8)
   private String password;
+  /**
+   * The Repeated password.
+   */
   @Size(min = 8)
   private String repeatedPassword;
 }

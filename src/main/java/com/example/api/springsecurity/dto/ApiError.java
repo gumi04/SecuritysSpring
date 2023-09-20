@@ -33,14 +33,32 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Api error.
+ */
 @Getter
 @Setter
 public class ApiError implements Serializable {
 
+  /**
+   * The Back message.
+   */
   private String backMessage;
+  /**
+   * The Message.
+   */
   private String message;
+  /**
+   * The Time stamp.
+   */
   @JsonFormat(pattern = "yyy/MM/dd HH:mm:ss")
   private LocalDateTime timeStamp;
+  /**
+   * The Url.
+   */
   private String url;
+  /**
+   * The Method.
+   */
   private String method;
 }

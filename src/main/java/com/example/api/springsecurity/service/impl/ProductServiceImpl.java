@@ -40,21 +40,45 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Product service.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
+  /**
+   * The Product repository.
+   */
   @Autowired
   private ProductRepository productRepository;
 
+  /**
+   * Fin all page.
+   *
+   * @param page the page
+   * @return the page
+   */
   @Override
   public Page<Product> finAll(Pageable page) {
     return productRepository.findAll(page);
   }
 
+  /**
+   * Fin by id optional.
+   *
+   * @param id the id
+   * @return the optional
+   */
   @Override
   public Optional<Product> finById(Long id) {
     return productRepository.findById(id);
   }
 
+  /**
+   * Save product.
+   *
+   * @param productDto the product dto
+   * @return the product
+   */
   @Override
   public Product save(ProductDto productDto) {
     Product product = new Product();
@@ -68,6 +92,13 @@ public class ProductServiceImpl implements ProductService {
     return productRepository.save(product);
   }
 
+  /**
+   * Update product.
+   *
+   * @param id         the id
+   * @param productDto the product dto
+   * @return the product
+   */
   @Override
   public Product update(Long id, ProductDto productDto) {
     Product productDb = productRepository.findById(id)
@@ -82,6 +113,12 @@ public class ProductServiceImpl implements ProductService {
     return productRepository.save(productDb);
   }
 
+  /**
+   * Disable product product.
+   *
+   * @param id the id
+   * @return the product
+   */
   @Override
   public Product disableProduct(Long id) {
     Product productDb = productRepository.findById(id)

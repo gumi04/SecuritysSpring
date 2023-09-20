@@ -29,7 +29,15 @@ package com.example.api.springsecurity.service;
 
 import com.example.api.springsecurity.persistence.entity.security.Role;
 
+/**
+ * The interface Role service.
+ */
 public interface RoleService {
 
+  /**
+   * Find default role role.
+   *
+   * @return the role
+   */
   Role findDefaultRole();
 }

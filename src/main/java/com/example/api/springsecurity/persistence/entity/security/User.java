@@ -46,27 +46,50 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * The type User.
+ */
 @Entity
 @Table(name = "\"user\"")
 @Getter
 @Setter
 public class User implements UserDetails {
 
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  /**
+   * The Username.
+   */
   @Column(unique = true)
 
   @Getter(AccessLevel.NONE)
   private String username;
+  /**
+   * The Name.
+   */
   private String name;
+  /**
+   * The Password.
+   */
   @Getter(AccessLevel.NONE)
   private String password;
 
+  /**
+   * The Role.
+   */
   @ManyToOne
   @JoinColumn(name = "role_id")
   private Role role;
 
+  /**
+   * Gets authorities.
+   *
+   * @return the authorities
+   */
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     if (Objects.isNull(role)) return null;
@@ -82,31 +105,61 @@ public class User implements UserDetails {
     return authorities;
   }
 
+  /**
+   * Gets password.
+   *
+   * @return the password
+   */
   @Override
   public String getPassword() {
     return password;
   }
 
+  /**
+   * Gets username.
+   *
+   * @return the username
+   */
   @Override
   public String getUsername() {
     return username;
   }
 
+  /**
+   * Is account non expired boolean.
+   *
+   * @return the boolean
+   */
   @Override
   public boolean isAccountNonExpired() {
     return true;
   }
 
+  /**
+   * Is account non locked boolean.
+   *
+   * @return the boolean
+   */
   @Override
   public boolean isAccountNonLocked() {
     return true;
   }
 
+  /**
+   * Is credentials non expired boolean.
+   *
+   * @return the boolean
+   */
   @Override
   public boolean isCredentialsNonExpired() {
     return true;
   }
 
+  /**
+   * Is enabled boolean.
+   *
+   * @return the boolean
+   */
   @Override
   public boolean isEnabled() {
     return true;

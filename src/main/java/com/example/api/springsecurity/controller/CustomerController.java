@@ -43,6 +43,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type Customer controller.
+ */
 @RestController
 @RequestMapping(value = "/customers")
 @Tag(
@@ -50,9 +53,18 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Create customers")
 public class CustomerController {
 
+  /**
+   * The Authentication servicce.
+   */
   @Autowired
   private AuthenticationService authenticationServicce;
 
+  /**
+   * Register user response entity.
+   *
+   * @param newUser the new user
+   * @return the response entity
+   */
   @PreAuthorize("permitAll")
   @Operation(summary = "registrar cleinte")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

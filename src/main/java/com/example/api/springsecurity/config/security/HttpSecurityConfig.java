@@ -27,13 +27,15 @@
 
 package com.example.api.springsecurity.config.security;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.example.api.springsecurity.config.security.filter.JwtAuthenticationFilter;
 import com.example.api.springsecurity.constants.RoleEnum;
 import com.example.api.springsecurity.constants.RolePermissionEnum;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -46,29 +48,58 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/**
+ * The type Http security config.
+ */
 @Configuration
 @EnableWebSecurity
 //@EnableMethodSecurity(prePostEnabled = true)
 public class HttpSecurityConfig {
 
+  /**
+   * The Authentication provider.
+   */
   @Autowired
   private AuthenticationProvider authenticationProvider;
 
 
+  /**
+   * The Jwt authentication filter.
+   */
   @Autowired
   private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+  /**
+   * The Authentication entry point.
+   */
   @Autowired
   private AuthenticationEntryPoint authenticationEntryPoint;
+  /**
+   * The Access denied handler.
+   */
   @Autowired
   private AccessDeniedHandler accessDeniedHandler;
+  /**
+   * The Authorization manager.
+   */
   @Autowired
   private AuthorizationManager<RequestAuthorizationContext> authorizationManager;
 
+  /**
+   * Security filter chain security filter chain.
+   *
+   * @param http the http
+   * @return the security filter chain
+   * @throws Exception the exception
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
+            .cors(withDefaults())
             .csrf(crsfConfig -> crsfConfig.disable())
             .sessionManagement(sessionMagConfig -> sessionMagConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
@@ -85,8 +116,32 @@ public class HttpSecurityConfig {
             .build();
   }
 
+  /**
+   * Cors configuration source cors configuration source.
+   *
+   * @return the cors configuration source
+   */
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("*"));
+    configuration.setAllowedMethods(Arrays.asList("*"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
 
 
+  }
+
+
+  /**
+   * Built request matchers.
+   *
+   * @param authReqConfig the auth req config
+   */
   private static void builtRequestMatchers(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     //autorizacion para productos
     authReqConfig.requestMatchers(HttpMethod.GET, "/products")
@@ -139,6 +194,11 @@ public class HttpSecurityConfig {
     authReqConfig.anyRequest().authenticated();
   }
 
+  /**
+   * Built request matchers spring doc.
+   *
+   * @param authReqConfig the auth req config
+   */
   private static void builtRequestMatchersSpringDoc(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     authReqConfig.requestMatchers(
                     "/swagger-ui/**",
@@ -149,6 +209,11 @@ public class HttpSecurityConfig {
     //authReqConfig.anyRequest().authenticated();
   }
 
+  /**
+   * Built request matchers role.
+   *
+   * @param authReqConfig the auth req config
+   */
   private static void builtRequestMatchersRole(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     //autorizacion para productos
     authReqConfig.requestMatchers(HttpMethod.GET, "/products")

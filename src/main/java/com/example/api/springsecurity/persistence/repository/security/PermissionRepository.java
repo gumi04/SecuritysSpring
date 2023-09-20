@@ -30,5 +30,8 @@ package com.example.api.springsecurity.persistence.repository.security;
 import com.example.api.springsecurity.persistence.entity.security.GrantedPermission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/**
+ * The interface Permission repository.
+ */
 public interface PermissionRepository extends JpaRepository<GrantedPermission, Long> {
 }

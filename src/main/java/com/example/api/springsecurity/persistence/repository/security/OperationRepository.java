@@ -34,10 +34,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+/**
+ * The interface Operation repository.
+ */
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long> {
+  /**
+   * Find by public access list.
+   *
+   * @return the list
+   */
   @Query("SELECT o FROM Operation o WHERE o.permitAll = true")
   List<Operation> findByPublicAccess();
 
+  /**
+   * Find by name optional.
+   *
+   * @param defaultRole the default role
+   * @return the optional
+   */
   Optional<Operation> findByName(String defaultRole);
 }

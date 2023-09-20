@@ -32,13 +32,47 @@ import com.example.api.springsecurity.dto.SaveUser;
 import com.example.api.springsecurity.dto.auth.AuthenticationRequest;
 import com.example.api.springsecurity.dto.auth.AuthenticationResponse;
 import com.example.api.springsecurity.persistence.entity.security.User;
+import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * The interface Authentication service.
+ */
 public interface AuthenticationService {
+  /**
+   * Register customer registred user.
+   *
+   * @param newUser the new user
+   * @return the registred user
+   */
   RegistredUser registerCustomer(SaveUser newUser);
 
+  /**
+   * Login authentication response.
+   *
+   * @param request the request
+   * @return the authentication response
+   */
   AuthenticationResponse login(AuthenticationRequest request);
 
+  /**
+   * Validate token boolean.
+   *
+   * @param jwt the jwt
+   * @return the boolean
+   */
   Boolean validateToken(String jwt);
 
+  /**
+   * Find loggged in user user.
+   *
+   * @return the user
+   */
   User findLogggedInUser();
+
+  /**
+   * Logout.
+   *
+   * @param request the request
+   */
+  void logout(HttpServletRequest request);
 }

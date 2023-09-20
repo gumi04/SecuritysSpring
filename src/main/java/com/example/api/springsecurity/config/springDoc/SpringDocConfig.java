@@ -38,6 +38,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
+/**
+ * The type Spring doc config.
+ */
 @Configuration
 public class SpringDocConfig {
 
@@ -66,6 +69,11 @@ public class SpringDocConfig {
   }
 
 
+  /**
+   * All grup grouped open api.
+   *
+   * @return the grouped open api
+   */
   @Bean
   public GroupedOpenApi allGrup() {
     return GroupedOpenApi.builder()
@@ -74,6 +82,11 @@ public class SpringDocConfig {
             .build();
   }
 
+  /**
+   * Auth grup grouped open api.
+   *
+   * @return the grouped open api
+   */
   @Bean
   public GroupedOpenApi authGrup() {
     return GroupedOpenApi.builder()
@@ -82,6 +95,11 @@ public class SpringDocConfig {
             .build();
   }
 
+  /**
+   * Category grup grouped open api.
+   *
+   * @return the grouped open api
+   */
   @Bean
   public GroupedOpenApi categoryGrup() {
     return GroupedOpenApi.builder()
@@ -91,6 +109,11 @@ public class SpringDocConfig {
             .build();
   }
 
+  /**
+   * Customer grup grouped open api.
+   *
+   * @return the grouped open api
+   */
   @Bean
   public GroupedOpenApi customerGrup() {
     return GroupedOpenApi.builder()
@@ -99,6 +122,11 @@ public class SpringDocConfig {
             .build();
   }
 
+  /**
+   * Product grup grouped open api.
+   *
+   * @return the grouped open api
+   */
   @Bean
   public GroupedOpenApi productGrup() {
     return GroupedOpenApi.builder()
@@ -107,6 +135,11 @@ public class SpringDocConfig {
             .build();
   }
 
+  /**
+   * Permisisons grup grouped open api.
+   *
+   * @return the grouped open api
+   */
   @Bean
   public GroupedOpenApi permisisonsGrup() {
     return GroupedOpenApi.builder()
@@ -115,6 +148,11 @@ public class SpringDocConfig {
             .build();
   }
 
+  /**
+   * Create api key scheme security scheme.
+   *
+   * @return the security scheme
+   */
   private SecurityScheme createAPIKeyScheme() {
     return new SecurityScheme().type(SecurityScheme.Type.HTTP)
             .bearerFormat("JWT")

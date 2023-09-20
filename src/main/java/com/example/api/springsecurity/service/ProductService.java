@@ -33,15 +33,49 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * The interface Product service.
+ */
 public interface ProductService {
 
+  /**
+   * Fin all page.
+   *
+   * @param page the page
+   * @return the page
+   */
   Page<Product> finAll(Pageable page);
 
+  /**
+   * Fin by id optional.
+   *
+   * @param id the id
+   * @return the optional
+   */
   Optional<Product> finById(Long id);
 
+  /**
+   * Save product.
+   *
+   * @param productDto the product dto
+   * @return the product
+   */
   Product save(ProductDto productDto);
 
+  /**
+   * Update product.
+   *
+   * @param id         the id
+   * @param productDto the product dto
+   * @return the product
+   */
   Product update(Long id, ProductDto productDto);
 
+  /**
+   * Disable product product.
+   *
+   * @param id the id
+   * @return the product
+   */
   Product disableProduct(Long id);
 }

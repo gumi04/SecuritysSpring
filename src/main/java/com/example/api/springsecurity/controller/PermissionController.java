@@ -49,6 +49,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type Permission controller.
+ */
 @RestController
 @RequestMapping("/permissions")
 @Tag(
@@ -56,9 +59,18 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Crud of permissions")
 public class PermissionController {
 
+  /**
+   * The Permission service.
+   */
   @Autowired
   private PermissionService permissionService;
 
+  /**
+   * Find all response entity.
+   *
+   * @param pageable the pageable
+   * @return the response entity
+   */
   @Operation(summary = "obtener permisos paginados", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Page<ShowPermission>> findAll(Pageable pageable) {
@@ -72,6 +84,12 @@ public class PermissionController {
     return ResponseEntity.notFound().build();
   }
 
+  /**
+   * Find one by id response entity.
+   *
+   * @param permissionId the permission id
+   * @return the response entity
+   */
   @Operation(summary = "obtiene un permiso por su id", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/{permissionId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ShowPermission> findOneById(@PathVariable Long permissionId) {
@@ -84,6 +102,12 @@ public class PermissionController {
     return ResponseEntity.notFound().build();
   }
 
+  /**
+   * Create one response entity.
+   *
+   * @param savePermission the save permission
+   * @return the response entity
+   */
   @Operation(summary = "crea un nuevo permiso", security = {@SecurityRequirement(name = "bearer")})
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ShowPermission> createOne(@RequestBody @Valid SavePermission savePermission) {
@@ -91,6 +115,12 @@ public class PermissionController {
     return ResponseEntity.status(HttpStatus.CREATED).body(permission);
   }
 
+  /**
+   * Delete one by id response entity.
+   *
+   * @param permissionId the permission id
+   * @return the response entity
+   */
   @Operation(summary = "elimina un permiso por su id", security = {@SecurityRequirement(name = "bearer")})
   @DeleteMapping(value = "/{permissionId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ShowPermission> deleteOneById(@PathVariable Long permissionId) {

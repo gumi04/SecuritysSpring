@@ -38,16 +38,28 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Role.
+ */
 @Entity
 @Getter
 @Setter
 public class Role {
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  /**
+   * The Name.
+   */
   private String name;
 
+  /**
+   * The Permissions.
+   */
   @JsonIgnore
   @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
   private List<GrantedPermission> permissions;

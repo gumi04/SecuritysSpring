@@ -20,30 +20,30 @@
  * any other work released this way by its authors.  You can apply it to
  * your programs, too.
  *
- * Nombre de archivo: AuthenticationRequest
+ * Nombre de archivo: LogoutResponse
  * Autor: 319207
- * Fecha de creación: septiembre 15, 2023
+ * Fecha de creación: septiembre 20, 2023
  */
 
 package com.example.api.springsecurity.dto.auth;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * The type Authentication request.
+ * The type Logout response.
  */
 @Getter
 @Setter
-public class AuthenticationRequest implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class LogoutResponse implements Serializable {
 
   /**
-   * The Username.
+   * The Message.
    */
-  private String username;
-  /**
-   * The Password.
-   */
-  private String password;
+  private String message;
 }

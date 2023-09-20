@@ -33,14 +33,48 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * The interface Category service.
+ */
 public interface CategoryService {
+  /**
+   * Fin all page.
+   *
+   * @param pageable the pageable
+   * @return the page
+   */
   Page<Category> finAll(Pageable pageable);
 
+  /**
+   * Fin by id optional.
+   *
+   * @param id the id
+   * @return the optional
+   */
   Optional<Category> finById(Long id);
 
+  /**
+   * Save category.
+   *
+   * @param categoryDto the category dto
+   * @return the category
+   */
   Category save(CategoryDto categoryDto);
 
+  /**
+   * Update category.
+   *
+   * @param id          the id
+   * @param categoryDto the category dto
+   * @return the category
+   */
   Category update(Long id, CategoryDto categoryDto);
 
+  /**
+   * Disable product category.
+   *
+   * @param id the id
+   * @return the category
+   */
   Category disableProduct(Long id);
 }

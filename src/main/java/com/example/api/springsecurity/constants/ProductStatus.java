@@ -27,7 +27,16 @@
 
 package com.example.api.springsecurity.constants;
 
+/**
+ * The enum Product status.
+ */
 public enum ProductStatus {
+  /**
+   * Enabled product status.
+   */
   ENABLED,
+  /**
+   * Disable product status.
+   */
   DISABLE
 }

@@ -28,6 +28,8 @@
 package com.example.api.springsecurity.config.security.filter;
 
 import com.example.api.springsecurity.exception.ObjectNotFoundException;
+import com.example.api.springsecurity.persistence.entity.security.JwtToken;
+import com.example.api.springsecurity.persistence.repository.security.JwtTokenRepository;
 import com.example.api.springsecurity.service.UserService;
 import com.example.api.springsecurity.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
@@ -35,6 +37,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,27 +48,61 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * The type Jwt authentication filter.
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+  /**
+   * The Jwt service.
+   */
   @Autowired
   private JwtService jwtService;
+  /**
+   * The User service.
+   */
   @Autowired
   private UserService userService;
+  /**
+   * The Jwt token repository.
+   */
+  @Autowired
+  private JwtTokenRepository jwtTokenRepository;
 
+  /**
+   * Do filter internal.
+   *
+   * @param request     the request
+   * @param response    the response
+   * @param filterChain the filter chain
+   * @throws ServletException the servlet exception
+   * @throws IOException      the io exception
+   */
   @Override
   protected void doFilterInternal(HttpServletRequest request,
                                   HttpServletResponse response,
                                   FilterChain filterChain) throws ServletException, IOException {
 
-    //1.- Obtener el encabezado de authorization
-    String authorizationHeader = request.getHeader("Authorization");
-    if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+    String jwt = jwtService.extractJwtFromRequest(request);
+
+    //1.- Obtener el authorization header
+    //2.- Obtener token
+
+    if (jwt == null || !StringUtils.hasText(jwt)) {
+      filterChain.doFilter(request, response);
+      return;
+
+    }
+
+    //2.1 Obtener token no expeirado desde BD y valido
+    Optional<JwtToken> token = jwtTokenRepository.findByToken(jwt);
+    boolean isValid = validateToken(token);
+
+    if (!isValid) {
       filterChain.doFilter(request, response);
       return;
     }
-    //2.- Obtener el token jwt desde el encabezado
-    String jwt = authorizationHeader.split(" ")[1];
 
     //3.- Obterner el subjhect/username desde el token, valida el formato del toke y fecha de expiracion
     String username = jwtService.extartUername(jwt);
@@ -82,5 +120,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //5.- ejecutar el resto de filtros
     filterChain.doFilter(request, response);
 
+  }
+
+  /**
+   * Validate token boolean.
+   *
+   * @param optionalJwtToken the optional jwt token
+   * @return the boolean
+   */
+  private boolean validateToken(Optional<JwtToken> optionalJwtToken) {
+    if (!optionalJwtToken.isPresent()) {
+      return false;
+    }
+
+    JwtToken token = optionalJwtToken.get();
+    Date now = new Date(System.currentTimeMillis());
+    boolean isValid = token.isValid() && token.getExpiration().after(now);
+
+    if (!isValid) {
+      updateTokenStatus(token);
+    }
+    return isValid;
+  }
+
+  /**
+   * Update token status.
+   *
+   * @param token the token
+   */
+  private void updateTokenStatus(JwtToken token) {
+    token.setValid(false);
+    jwtTokenRepository.save(token);
   }
 }

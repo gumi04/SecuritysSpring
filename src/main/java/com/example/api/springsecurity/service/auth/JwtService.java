@@ -27,11 +27,45 @@
 
 package com.example.api.springsecurity.service.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * The interface Jwt service.
+ */
 public interface JwtService {
+  /**
+   * Generate token string.
+   *
+   * @param user  the user
+   * @param claim the claim
+   * @return the string
+   */
   String generateToken(UserDetails user, Map<String, Object> claim);
 
+  /**
+   * Extart uername string.
+   *
+   * @param jwt the jwt
+   * @return the string
+   */
   String extartUername(String jwt);
+
+  /**
+   * Extract jwt from request string.
+   *
+   * @param request the request
+   * @return the string
+   */
+  String extractJwtFromRequest(HttpServletRequest request);
+
+  /**
+   * Extract expiration date.
+   *
+   * @param jwt the jwt
+   * @return the date
+   */
+  Date extractExpiration(String jwt);
 }

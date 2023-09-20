@@ -33,13 +33,40 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * The interface Permission service.
+ */
 public interface PermissionService {
 
+  /**
+   * Find all page.
+   *
+   * @param pageable the pageable
+   * @return the page
+   */
   Page<ShowPermission> findAll(Pageable pageable);
 
+  /**
+   * Find one by id optional.
+   *
+   * @param permissionId the permission id
+   * @return the optional
+   */
   Optional<ShowPermission> findOneById(Long permissionId);
 
+  /**
+   * Create one show permission.
+   *
+   * @param savePermission the save permission
+   * @return the show permission
+   */
   ShowPermission createOne(SavePermission savePermission);
 
+  /**
+   * Delete one by id show permission.
+   *
+   * @param permissionId the permission id
+   * @return the show permission
+   */
   ShowPermission deleteOneById(Long permissionId);
 }

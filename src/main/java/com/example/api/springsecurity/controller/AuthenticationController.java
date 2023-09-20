@@ -29,11 +29,13 @@ package com.example.api.springsecurity.controller;
 
 import com.example.api.springsecurity.dto.auth.AuthenticationRequest;
 import com.example.api.springsecurity.dto.auth.AuthenticationResponse;
+import com.example.api.springsecurity.dto.auth.LogoutResponse;
 import com.example.api.springsecurity.persistence.entity.security.User;
 import com.example.api.springsecurity.service.auth.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -46,6 +48,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type Authentication controller.
+ */
 @RestController
 @RequestMapping("/auth")
 @Tag(
@@ -53,9 +58,18 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Authentication user")
 public class AuthenticationController {
 
+  /**
+   * The Authentication service.
+   */
   @Autowired
   private AuthenticationService authenticationService;
 
+  /**
+   * Auntheticate response entity.
+   *
+   * @param request the request
+   * @return the response entity
+   */
   @PreAuthorize("permitAll")
   @Operation(summary = "autenticacion de usarios")
   @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,6 +78,12 @@ public class AuthenticationController {
     return ResponseEntity.ok(authenticationService.login(request));
   }
 
+  /**
+   * Validate response entity.
+   *
+   * @param jwt the jwt
+   * @return the response entity
+   */
   @PreAuthorize("permitAll")
   @Operation(summary = "validacion de token")
   @GetMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,6 +93,23 @@ public class AuthenticationController {
 
   }
 
+  /**
+   * Logout response entity.
+   *
+   * @param request the request
+   * @return the response entity
+   */
+  @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<LogoutResponse> logout(HttpServletRequest request) {
+    authenticationService.logout(request);
+    return ResponseEntity.ok(new LogoutResponse("Logout exitoso"));
+  }
+
+  /**
+   * Find my profile response entity.
+   *
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('READ_MY_PROFILE')")
   @Operation(summary = "autenticacion de usarios", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)

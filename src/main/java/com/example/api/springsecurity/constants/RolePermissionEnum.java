@@ -27,20 +27,56 @@
 
 package com.example.api.springsecurity.constants;
 
+/**
+ * The enum Role permission enum.
+ */
 public enum RolePermissionEnum {
 
+  /**
+   * Read all products role permission enum.
+   */
   READ_ALL_PRODUCTS,
+  /**
+   * Read one product role permission enum.
+   */
   READ_ONE_PRODUCT,
+  /**
+   * Create one product role permission enum.
+   */
   CREATE_ONE_PRODUCT,
+  /**
+   * Update one product role permission enum.
+   */
   UPDATE_ONE_PRODUCT,
+  /**
+   * Disable one product role permission enum.
+   */
   DISABLE_ONE_PRODUCT,
 
+  /**
+   * Read all categories role permission enum.
+   */
   READ_ALL_CATEGORIES,
+  /**
+   * Read one category role permission enum.
+   */
   READ_ONE_CATEGORY,
+  /**
+   * Create one category role permission enum.
+   */
   CREATE_ONE_CATEGORY,
+  /**
+   * Update one category role permission enum.
+   */
   UPDATE_ONE_CATEGORY,
+  /**
+   * Disable one category role permission enum.
+   */
   DISABLE_ONE_CATEGORY,
 
+  /**
+   * Read my profile role permission enum.
+   */
   READ_MY_PROFILE;
 
 }

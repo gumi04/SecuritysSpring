@@ -40,18 +40,36 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * The type Security beans injector.
+ */
 @Configuration
 public class SecurityBeansInjector {
 
+  /**
+   * The User repository.
+   */
   @Autowired
   private UserRepository userRepository;
 
+  /**
+   * Authentication manager authentication manager.
+   *
+   * @param authenticationConfiguration the authentication configuration
+   * @return the authentication manager
+   * @throws Exception the exception
+   */
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
 
 
+  /**
+   * Authentication provider authentication provider.
+   *
+   * @return the authentication provider
+   */
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
@@ -61,12 +79,22 @@ public class SecurityBeansInjector {
   }
 
 
+  /**
+   * Password encoder password encoder.
+   *
+   * @return the password encoder
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
 
+  /**
+   * User details service user details service.
+   *
+   * @return the user details service
+   */
   @Bean
   public UserDetailsService userDetailsService() {
     return username ->

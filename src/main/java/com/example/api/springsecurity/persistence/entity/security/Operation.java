@@ -36,17 +36,38 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Operation.
+ */
 @Entity
 @Getter
 @Setter
 public class Operation {
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  /**
+   * The Name.
+   */
   private String name;
+  /**
+   * The Path.
+   */
   private String path;
+  /**
+   * The Http method.
+   */
   private String httpMethod;
+  /**
+   * The Permit all.
+   */
   private boolean permitAll;
+  /**
+   * The Module.
+   */
   @ManyToOne
   @JoinColumn(name = "module_id")
   private Module module;

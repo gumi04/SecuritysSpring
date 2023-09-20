@@ -49,16 +49,32 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
+/**
+ * The type Custom authorization manager.
+ */
 @Component
 @Log4j2
 public class CustomAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
 
+  /**
+   * The Operation repository.
+   */
   @Autowired
   private OperationRepository operationRepository;
+  /**
+   * The User service.
+   */
   @Autowired
   private UserService userService;
 
 
+  /**
+   * Check authorization decision.
+   *
+   * @param authentication the authentication
+   * @param requestContext the request context
+   * @return the authorization decision
+   */
   @Override
   public AuthorizationDecision check(Supplier<Authentication> authentication,
                                      RequestAuthorizationContext requestContext) {
@@ -79,6 +95,14 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
     return new AuthorizationDecision(isGranted);
   }
 
+  /**
+   * Is granted boolean.
+   *
+   * @param url            the url
+   * @param method         the method
+   * @param authentication the authentication
+   * @return the boolean
+   */
   private boolean isGranted(String url, String method, Authentication authentication) {
 
     if (authentication == null || !(authentication instanceof UsernamePasswordAuthenticationToken)) {
@@ -91,6 +115,12 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
   }
 
 
+  /**
+   * Obtained operations list.
+   *
+   * @param authentication the authentication
+   * @return the list
+   */
   private List<Operation> obtainedOperations(Authentication authentication) {
     UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) authentication;
     String username = (String) authToken.getPrincipal();
@@ -102,12 +132,25 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
             .collect(Collectors.toList());
   }
 
+  /**
+   * Is public boolean.
+   *
+   * @param url    the url
+   * @param method the method
+   * @return the boolean
+   */
   private boolean isPublic(String url, String method) {
     List<Operation> publicAccessEndpoints = operationRepository.findByPublicAccess();
     return getOperationPredicate(url, method, publicAccessEndpoints);
 
   }
 
+  /**
+   * Extract url string.
+   *
+   * @param request the request
+   * @return the string
+   */
   private String extractUrl(HttpServletRequest request) {
     String contextPath = request.getContextPath();
     String url = request.getRequestURI();
@@ -118,6 +161,14 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
   }
 
 
+  /**
+   * Gets operation predicate.
+   *
+   * @param url           the url
+   * @param method        the method
+   * @param operationList the operation list
+   * @return the operation predicate
+   */
   private boolean getOperationPredicate(String url, String method, List<Operation> operationList) {
     return operationList.stream().anyMatch(item -> {
       String basePath = item.getModule().getBasePath();

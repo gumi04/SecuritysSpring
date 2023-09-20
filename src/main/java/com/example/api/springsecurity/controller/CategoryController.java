@@ -50,6 +50,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type Category controller.
+ */
 @RestController
 @RequestMapping("/categories")
 @Tag(
@@ -57,9 +60,18 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Crud of categories")
 public class CategoryController {
 
+  /**
+   * The Category service.
+   */
   @Autowired
   private CategoryService categoryService;
 
+  /**
+   * Find all response entity.
+   *
+   * @param pageable the pageable
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('READ_ALL_CATEGORIES')")
   @Operation(summary = "obtener categorias paginados", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,6 +85,12 @@ public class CategoryController {
     return ResponseEntity.notFound().build();
   }
 
+  /**
+   * Find byid response entity.
+   *
+   * @param id the id
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('READ_ONE_CATEGORY')")
   @Operation(summary = "obtener categoria por su id", security = {@SecurityRequirement(name = "bearer")})
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,6 +102,12 @@ public class CategoryController {
   }
 
 
+  /**
+   * Create response entity.
+   *
+   * @param categoryDto the category dto
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('CREATE_ONE_CATEGORY')")
   @Operation(summary = "crear una categoria", security = {@SecurityRequirement(name = "bearer")})
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,6 +115,13 @@ public class CategoryController {
     return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(categoryDto));
   }
 
+  /**
+   * Update response entity.
+   *
+   * @param id          the id
+   * @param categoryDto the category dto
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('UPDATE_ONE_CATEGORY')")
   @Operation(summary = "actualizar categoria", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,6 +129,12 @@ public class CategoryController {
     return ResponseEntity.ok(categoryService.update(id, categoryDto));
   }
 
+  /**
+   * Disable by id response entity.
+   *
+   * @param id the id
+   * @return the response entity
+   */
   @PreAuthorize("hasAuthority('DISABLE_ONE_CATEGORY')")
   @Operation(summary = "desabilitar categoria", security = {@SecurityRequirement(name = "bearer")})
   @PutMapping(value = "/{id}/disabled", produces = MediaType.APPLICATION_JSON_VALUE)

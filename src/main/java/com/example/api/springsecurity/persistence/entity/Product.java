@@ -39,19 +39,37 @@ import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
 import lombok.Data;
 
+/**
+ * The type Product.
+ */
 @Entity
 @Data
 public class Product {
 
+  /**
+   * The Id.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long Id;
 
+  /**
+   * The Name.
+   */
   private String name;
+  /**
+   * The Price.
+   */
   private BigDecimal price;
+  /**
+   * The Status.
+   */
   @Enumerated(EnumType.STRING)
   private ProductStatus status;
 
+  /**
+   * The Category.
+   */
   @ManyToOne
   @JoinColumn(name = "category_id")
   private Category category;

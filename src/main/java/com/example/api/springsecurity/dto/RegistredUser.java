@@ -31,14 +31,32 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Registred user.
+ */
 @Getter
 @Setter
 public class RegistredUser implements Serializable {
 
+  /**
+   * The Id.
+   */
   private Long id;
+  /**
+   * The Name.
+   */
   private String name;
+  /**
+   * The User name.
+   */
   private String userName;
+  /**
+   * The Role.
+   */
   private String role;
+  /**
+   * The Jwt.
+   */
   private String jwt;
 
 }

@@ -39,22 +39,46 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Category service.
+ */
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+  /**
+   * The Category repository.
+   */
   @Autowired
   private CategoryRepository categoryRepository;
 
+  /**
+   * Fin all page.
+   *
+   * @param pageable the pageable
+   * @return the page
+   */
   @Override
   public Page<Category> finAll(Pageable pageable) {
     return categoryRepository.findAll(pageable);
   }
 
+  /**
+   * Fin by id optional.
+   *
+   * @param id the id
+   * @return the optional
+   */
   @Override
   public Optional<Category> finById(Long id) {
     return categoryRepository.findById(id);
   }
 
+  /**
+   * Save category.
+   *
+   * @param categoryDto the category dto
+   * @return the category
+   */
   @Override
   public Category save(CategoryDto categoryDto) {
     Category category = new Category();
@@ -63,6 +87,13 @@ public class CategoryServiceImpl implements CategoryService {
     return categoryRepository.save(category);
   }
 
+  /**
+   * Update category.
+   *
+   * @param id          the id
+   * @param categoryDto the category dto
+   * @return the category
+   */
   @Override
   public Category update(Long id, CategoryDto categoryDto) {
     Category categoryDb = categoryRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Category not Found"));
@@ -70,6 +101,12 @@ public class CategoryServiceImpl implements CategoryService {
     return categoryRepository.save(categoryDb);
   }
 
+  /**
+   * Disable product category.
+   *
+   * @param id the id
+   * @return the category
+   */
   @Override
   public Category disableProduct(Long id) {
     Category categoryDb = categoryRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Category not Found"));

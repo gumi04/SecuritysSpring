@@ -31,12 +31,30 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The type Show permission.
+ */
 @Getter
 @Setter
 public class ShowPermission implements Serializable {
+  /**
+   * The Id.
+   */
   private long id;
+  /**
+   * The Operation.
+   */
   private String operation;
+  /**
+   * The Http method.
+   */
   private String httpMethod;
+  /**
+   * The Module.
+   */
   private String module;
+  /**
+   * The Role.
+   */
   private String role;
 }

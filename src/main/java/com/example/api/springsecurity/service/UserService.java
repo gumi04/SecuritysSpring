@@ -31,8 +31,23 @@ import com.example.api.springsecurity.dto.SaveUser;
 import com.example.api.springsecurity.persistence.entity.security.User;
 import java.util.Optional;
 
+/**
+ * The interface User service.
+ */
 public interface UserService {
+  /**
+   * Save customer user.
+   *
+   * @param newUser the new user
+   * @return the user
+   */
   User saveCustomer(SaveUser newUser);
 
+  /**
+   * Find one by username optional.
+   *
+   * @param username the username
+   * @return the optional
+   */
   Optional<User> findOneByUsername(String username);
 }

@@ -30,7 +30,13 @@ package com.example.api.springsecurity.constants;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The enum Role enum.
+ */
 public enum RoleEnum {
+  /**
+   * Administrator role enum.
+   */
   ADMINISTRATOR(Arrays.asList(
           RolePermissionEnum.READ_ALL_PRODUCTS,
           RolePermissionEnum.READ_ONE_PRODUCT,
@@ -44,6 +50,9 @@ public enum RoleEnum {
           RolePermissionEnum.DISABLE_ONE_CATEGORY,
           RolePermissionEnum.READ_MY_PROFILE
   )),
+  /**
+   * Assistant administrator role enum.
+   */
   ASSISTANT_ADMINISTRATOR(Arrays.asList(
           RolePermissionEnum.READ_ALL_PRODUCTS,
           RolePermissionEnum.READ_ONE_PRODUCT,
@@ -55,20 +64,41 @@ public enum RoleEnum {
 
           RolePermissionEnum.READ_MY_PROFILE
   )),
+  /**
+   * Customer role enum.
+   */
   CUSTOMER(Arrays.asList(
           RolePermissionEnum.READ_MY_PROFILE
   ));
 
+  /**
+   * The Permissions.
+   */
   private List<RolePermissionEnum> permissions;
 
+  /**
+   * Instantiates a new Role enum.
+   *
+   * @param permissions the permissions
+   */
   RoleEnum(List<RolePermissionEnum> permissions) {
     this.permissions = permissions;
   }
 
+  /**
+   * Gets permissions.
+   *
+   * @return the permissions
+   */
   public List<RolePermissionEnum> getPermissions() {
     return permissions;
   }
 
+  /**
+   * Sets permissions.
+   *
+   * @param permissions the permissions
+   */
   public void setPermissions(List<RolePermissionEnum> permissions) {
     this.permissions = permissions;
   }
