@@ -34,6 +34,8 @@ import com.example.api.springsecurity.persistence.entity.security.User;
 import com.example.api.springsecurity.persistence.repository.security.OperationRepository;
 import com.example.api.springsecurity.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -46,6 +48,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
@@ -105,7 +109,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
    */
   private boolean isGranted(String url, String method, Authentication authentication) {
 
-    if (authentication == null || !(authentication instanceof UsernamePasswordAuthenticationToken)) {
+    if (authentication == null || !(authentication instanceof JwtAuthenticationToken)) {
       throw new AuthenticationCredentialsNotFoundException("User not logged in");
     }
 
@@ -122,14 +126,37 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
    * @return the list
    */
   private List<Operation> obtainedOperations(Authentication authentication) {
-    UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) authentication;
-    String username = (String) authToken.getPrincipal();
+    JwtAuthenticationToken authToken = (JwtAuthenticationToken) authentication;
+
+    Jwt jwt = authToken.getToken();
+    String username = jwt.getSubject();
+
     User user = userService.findOneByUsername(username)
             .orElseThrow(() -> new ObjectNotFoundException("User not found: " + username));
 
-    return user.getRole().getPermissions().stream()
+    List<Operation> operations = user.getRole().getPermissions().stream()
             .map(GrantedPermission::getOperation)
             .collect(Collectors.toList());
+
+    List<String> scopes = extractScopes(jwt);
+
+    if (!scopes.contains("ALL")){
+      operations = operations
+                .stream()
+                .filter(operation -> scopes.contains(operation.getName()))
+                .collect(Collectors.toList());
+    }
+    return operations;
+  }
+
+  private List<String> extractScopes(Jwt jwt) {
+    List<String> scope = new ArrayList<>();
+    try{
+      scope = (List<String>) jwt.getClaims().get("scope");
+    } catch (Exception exception){
+      log.info("Hubo un problema al extraer los scopes del cliente");
+    }
+    return scope;
   }
 
   /**

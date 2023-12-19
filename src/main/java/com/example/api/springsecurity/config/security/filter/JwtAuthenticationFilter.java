@@ -51,8 +51,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * The type Jwt authentication filter.
  */
-@Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+//@Component
+public class JwtAuthenticationFilter  {
 
   /**
    * The Jwt service.
@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
    * @throws ServletException the servlet exception
    * @throws IOException      the io exception
    */
-  @Override
+
   protected void doFilterInternal(HttpServletRequest request,
                                   HttpServletResponse response,
                                   FilterChain filterChain) throws ServletException, IOException {
