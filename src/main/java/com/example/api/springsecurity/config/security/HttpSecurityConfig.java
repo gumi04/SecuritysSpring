@@ -27,16 +27,12 @@
 
 package com.example.api.springsecurity.config.security;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import com.example.api.springsecurity.config.security.filter.JwtAuthenticationFilter;
 import com.example.api.springsecurity.constants.RoleEnum;
 import com.example.api.springsecurity.constants.RolePermissionEnum;
-import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -49,9 +45,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * The type Http security config.
@@ -100,54 +95,21 @@ public class HttpSecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
-            .cors(withDefaults())
-            .csrf(crsfConfig -> crsfConfig.disable())
-            .sessionManagement(sessionMagConfig -> sessionMagConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests(authConfig -> {
-              builtRequestMatchersSpringDoc(authConfig);
-              authConfig.anyRequest().access(authorizationManager);
+              .cors(withDefaults())
+              .csrf(crsfConfig -> crsfConfig.disable())
+              .sessionManagement(sessionMagConfig -> sessionMagConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+              .authenticationProvider(authenticationProvider)
+              .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+              .authorizeHttpRequests(authConfig -> {
+                builtRequestMatchersSpringDoc(authConfig);
+                authConfig.anyRequest().access(authorizationManager);
 
-            })
-            .exceptionHandling(exceptionHandling -> {
-              exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
-              exceptionHandling.accessDeniedHandler(accessDeniedHandler);
-            })
-            .build();
-  }
-
-  /**
-   * Cors configuration source cors configuration source.
-   *
-   * @return the cors configuration source
-   */
-  @Profile({"local", "dev"})
-  @Bean
-  CorsConfigurationSource defaultCorsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("*"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    configuration.setAllowCredentials(true);
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
-
-  @Profile("docker")
-  @Bean
-  CorsConfigurationSource dockerCorsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://client"));
-    configuration.setAllowedMethods(Arrays.asList("*"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    configuration.setAllowCredentials(true);
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
+              })
+              .exceptionHandling(exceptionHandling -> {
+                exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
+                exceptionHandling.accessDeniedHandler(accessDeniedHandler);
+              })
+              .build();
   }
 
 
@@ -159,51 +121,51 @@ public class HttpSecurityConfig {
   private static void builtRequestMatchers(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     //autorizacion para productos
     authReqConfig.requestMatchers(HttpMethod.GET, "/products")
-            .hasAuthority(RolePermissionEnum.READ_ALL_PRODUCTS.name());
+              .hasAuthority(RolePermissionEnum.READ_ALL_PRODUCTS.name());
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/products/{id}")
-            .hasAuthority(RolePermissionEnum.READ_ONE_PRODUCT.name());
+              .hasAuthority(RolePermissionEnum.READ_ONE_PRODUCT.name());
 
     authReqConfig.requestMatchers(HttpMethod.POST, "/products")
-            .hasAuthority(RolePermissionEnum.CREATE_ONE_PRODUCT.name());
+              .hasAuthority(RolePermissionEnum.CREATE_ONE_PRODUCT.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{id}")
-            .hasAuthority(RolePermissionEnum.UPDATE_ONE_PRODUCT.name());
+              .hasAuthority(RolePermissionEnum.UPDATE_ONE_PRODUCT.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{id}/disabled")
-            .hasAuthority(RolePermissionEnum.DISABLE_ONE_PRODUCT.name());
+              .hasAuthority(RolePermissionEnum.DISABLE_ONE_PRODUCT.name());
 
 
     //autorizacion para categorias
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/categories")
-            .hasAuthority(RolePermissionEnum.READ_ALL_CATEGORIES.name());
+              .hasAuthority(RolePermissionEnum.READ_ALL_CATEGORIES.name());
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/categories/{id}")
-            .hasAuthority(RolePermissionEnum.READ_ONE_CATEGORY.name());
+              .hasAuthority(RolePermissionEnum.READ_ONE_CATEGORY.name());
 
     authReqConfig.requestMatchers(HttpMethod.POST, "/categories")
-            .hasAuthority(RolePermissionEnum.CREATE_ONE_CATEGORY.name());
+              .hasAuthority(RolePermissionEnum.CREATE_ONE_CATEGORY.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/categories/{id}")
-            .hasAuthority(RolePermissionEnum.UPDATE_ONE_CATEGORY.name());
+              .hasAuthority(RolePermissionEnum.UPDATE_ONE_CATEGORY.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/categories/{id}/disabled")
-            .hasAuthority(RolePermissionEnum.DISABLE_ONE_CATEGORY.name());
+              .hasAuthority(RolePermissionEnum.DISABLE_ONE_CATEGORY.name());
 
     //autorizacion para profile
     authReqConfig.requestMatchers(HttpMethod.GET, "/auth/profile")
-            .hasAuthority(RolePermissionEnum.READ_MY_PROFILE.name());
+              .hasAuthority(RolePermissionEnum.READ_MY_PROFILE.name());
 
     //autorizacion de endpoint publicos
     authReqConfig.requestMatchers(HttpMethod.POST, "/customers").permitAll();
     authReqConfig.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
     authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate").permitAll();
     authReqConfig.requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html")
-            .permitAll();
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html")
+              .permitAll();
 
     authReqConfig.anyRequest().authenticated();
   }
@@ -215,10 +177,10 @@ public class HttpSecurityConfig {
    */
   private static void builtRequestMatchersSpringDoc(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     authReqConfig.requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html")
-            .permitAll();
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html")
+              .permitAll();
 
     //authReqConfig.anyRequest().authenticated();
   }
@@ -231,10 +193,10 @@ public class HttpSecurityConfig {
   private static void builtRequestMatchersRole(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
     //autorizacion para productos
     authReqConfig.requestMatchers(HttpMethod.GET, "/products")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/products/{id}")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
 
     //validar con un regex
     //authReqConfig.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.GET, "/products/[0-9]*"))
@@ -242,46 +204,46 @@ public class HttpSecurityConfig {
 
 
     authReqConfig.requestMatchers(HttpMethod.POST, "/products")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{id}")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/products/{id}/disabled")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
 
 
     //autorizacion para categorias
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/categories")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.GET, "/categories/{id}")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.POST, "/categories")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/categories/{id}")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name());
 
     authReqConfig.requestMatchers(HttpMethod.PUT, "/categories/{id}/disabled")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name());
 
     //autorizacion para profile
     authReqConfig.requestMatchers(HttpMethod.GET, "/auth/profile")
-            .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name(), RoleEnum.CUSTOMER.name());
+              .hasAnyRole(RoleEnum.ADMINISTRATOR.name(), RoleEnum.ASSISTANT_ADMINISTRATOR.name(), RoleEnum.CUSTOMER.name());
 
     //autorizacion de endpoint publicos
     authReqConfig.requestMatchers(HttpMethod.POST, "/customers").permitAll();
     authReqConfig.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
     authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate").permitAll();
     authReqConfig.requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html")
-            .permitAll();
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html")
+              .permitAll();
 
     authReqConfig.anyRequest().authenticated();
   }

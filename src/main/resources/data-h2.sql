@@ -71,6 +71,7 @@ INSERT INTO granted_permission (role_id, operation_id) VALUES (3, 20);
 INSERT INTO "user" (username, name, password, role_id) VALUES ('nami', 'luis márquez', '$2a$10$9TU/nhqwqqNDfRx8Eg2Wvu9i/yd7UimLaLYigHaad8R/qLj7j4H72',1);
 INSERT INTO "user" (username, name, password, role_id) VALUES ('robin', 'fulano pérez', '$2a$10$7Qsr4MRDTq4e.9ZjXgOvCu/0clEKlTGwtVlRMgi.wtB0AWiDISEx.',2);
 INSERT INTO "user" (username, name, password, role_id) VALUES ('zoro', 'zoro', '$2a$10$Eb11qu4GEU3dVJmUtnfaVOuK7f8aaOYWNdNlxWGSC2VCR87ckD8nC',3);
+INSERT INTO "user" (username, name, password, role_id) VALUES ('admin', 'admin', '$2a$10$Eb11qu4GEU3dVJmUtnfaVOuK7f8aaOYWNdNlxWGSC2VCR87ckD8nC',3);
 
 insert into category (name, status) values ('Alcentra Capital Corp.','ENABLED');
 insert into category (name, status) values ('RiverNorth Opportunities Fund, Inc.','ENABLED');
